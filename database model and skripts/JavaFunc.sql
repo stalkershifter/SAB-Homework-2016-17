@@ -43,7 +43,7 @@ Select * From [Objekat]
 Declare @idObjekta int
 Delete From [dbo].[Objekat] Where idObjekta = @idObjekta
 
---public abstract int unesiSprat(int brSprata, int idObjekat); 
+--public int unesiSprat(int brSprata, int idObjekat); 
 --@return idSprat ili -1 u slucaju greske
   
 select * from [Sprat]
@@ -51,14 +51,13 @@ select * from [Sprat]
 Insert Into Sprat (idObjekta, BrojSprata) Values (13, 2)
 
 --@return 0-operacija uspesna 1-operacija neuspesna
---public abstract int obrisiSprat(int idSprat); 
+--public int obrisiSprat(int idSprat); 
 
 Declare @idSprata int
 Delete From [dbo].[Sprat] Where idSprata = @idSprata
 
 --@return idZaposleni ili -1 u slucaju greske
---public abstract int unesiZaposlenog(String ime, String prezime, String jmbg, String pol, String ziroRacun, String email, String brojTelefona); 
-
+--public int unesiZaposlenog(String ime, String prezime, String jmbg, String pol, String ziroRacun, String email, String brojTelefona); 
 
 Declare @ime varchar(100),
 		@prezime varchar(100),
@@ -89,7 +88,7 @@ Declare @idZaposlenog int
 Delete From [dbo].[Zaposleni] Where idZaposlenog = @idZaposlenog
 
 --@return ukupanIsplacenIznos ili -1 ukoliko zaposleni ne postoji
---public BigDecimal dohvatiUkupanIsplacenIznosZaZaposlenog(int idZaposleni);
+--public BigDecimal dohvatiUkupanIsplacenIznosZaZaposlenog(int idZaposleni)
 
 Declare @idZaposlenog int
 Set @idZaposlenog = 6
@@ -97,33 +96,44 @@ Set @idZaposlenog = 6
 Select UkupnaZarada From [dbo].[Zaposleni] Where idZaposlenog = @idZaposlenog
 
 --@return prosecnaOcena ili -1 ukoliko zaposleni ne postoji
---public BigDecimal dohvatiProsecnuOcenuZaZaposlenog(int idZaposleni);
+--public BigDecimal dohvatiProsecnuOcenuZaZaposlenog(int idZaposleni)
 
 Declare @idZaposlenog int
 Set @idZaposlenog = 6
 
 Select ProsecnaOcena From [dbo].[Zaposleni] Where idZaposlenog = @idZaposlenog    
 	
-	/**
-     * 
-     * @param idZaposleni
-     * @return brojTrenutnoZaduzeneOpreme  ili -1 ukoliko zaposleni ne postoji
-     */
-    public abstract int dohvatiBrojTrenutnoZaduzeneOpremeZaZaposlenog(int idZaposleni);
-    /**
-     * 
-     * @return lista primarnih kljuceva svih zaposlenih ili null u slucaju greske ili ukoliko nema zaposlenih
-     */
-    public abstract List<Integer> dohvatiSveZaposlene();
+
+--@return brojTrenutnoZaduzeneOpreme ili -1 ukoliko zaposleni ne postoji
+--public int dohvatiBrojTrenutnoZaduzeneOpremeZaZaposlenog(int idZaposleni)
+
+Declare @idZaposlenog int
+Set @idZaposlenog = 6
+
+Select ZaduzenaOprema From [dbo].[Zaposleni] Where idZaposlenog = @idZaposlenog 
+
+--@return lista primarnih kljuceva svih zaposlenih ili null u slucaju greske ili ukoliko nema zaposlenih
+--public List<Integer> dohvatiSveZaposlene();
     
-    /**
-     * 
-     * @param idSef
-     * @param plata
-     * @param idGradiliste
-     * @return idMagacin -1 u slucaju greske
-     */
-    public abstract int unesiMagacin(int idSef, BigDecimal plata, int idGradiliste); 
+Select idZaposlenog From [dbo].[Zaposleni]
+
+--@return idMagacin -1 u slucaju greske
+--public int unesiMagacin(int idSef, BigDecimal plata, int idGradiliste) 
+
+Declare @idSef int,
+		@plata decimal(10,3),
+		@idGradiliste int
+
+Set @idSef = 6
+Set	@plata = 500
+Set	@idGradiliste = 13
+
+Insert Into Magacin (idSefa, idGradilista, Plata)
+Values (@idSef, @idGradiliste, @plata)
+Select @@Identity
+
+select * from Magacin
+
     /**
      * 
      * @param idMagacin
