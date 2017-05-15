@@ -359,17 +359,61 @@ public class mn120354 extends Funkcionalnosti{
 
     @Override
     public int obrisiMagacin(int idMagacin) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int succ = 1;
+        try{
+        String querry = "Delete From [dbo].[Magacin] Where idMagacina = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setInt(1, idMagacin);
+            int rowsDeleted = stm.executeUpdate();
+         
+            if (rowsDeleted == 0) 
+                succ = 0;
+        
+        } catch (SQLException ex) {
+            succ = 0;
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return succ;
     }
 
     @Override
     public int izmeniSefaZaMagacin(int idMagacin, int idSefNovo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int succ = 1;
+        try {
+            String querry = "Update [dbo].[Magacin] Set idSefa = ? Where idMagacina = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setInt(1, idSefNovo);
+            stm.setInt(2, idMagacin);
+            int rowsInserted = stm.executeUpdate();
+         
+            if (rowsInserted == 0)
+                throw new SQLException("Update failed!");
+            
+        } catch (SQLException ex) {
+            succ = 0;
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return succ;        
     }
 
     @Override
     public int izmeniPlatuZaMagacin(int idMagacin, BigDecimal plataNovo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int succ = 1;
+        try {
+            String querry = "Update [dbo].[Magacin] Set Plata = ? Where idMagacina = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setBigDecimal(1, plataNovo);
+            stm.setInt(2, idMagacin);
+            int rowsInserted = stm.executeUpdate();
+         
+            if (rowsInserted == 0)
+                throw new SQLException("Update failed!");
+            
+        } catch (SQLException ex) {
+            succ = 0;
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return succ;  
     }
 
     @Override
