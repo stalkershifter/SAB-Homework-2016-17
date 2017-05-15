@@ -7,6 +7,7 @@ package student;
 
 import funkcionalnosti.Funkcionalnosti;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -232,32 +233,128 @@ public class mn120354 extends Funkcionalnosti{
 
     @Override
     public int obrisiZaposlenog(int idZaposleni) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int succ = 1;
+        try{
+        String querry = "Delete From [dbo].[Zaposleni] Where idZaposlenog = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setInt(1, idZaposleni);
+            int rowsDeleted = stm.executeUpdate();
+         
+            if (rowsDeleted == 0) 
+                succ = 0;
+        
+        } catch (SQLException ex) {
+            succ = 0;
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return succ;
     }
 
     @Override
     public BigDecimal dohvatiUkupanIsplacenIznosZaZaposlenog(int idZaposleni) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BigDecimal ukupnaIsplata = new BigDecimal(-1);
+        try{
+            String querry = "Select UkupnaZarada From [dbo].[Zaposleni] Where idZaposlenog = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setInt(1, idZaposleni);
+            ResultSet rs = stm.executeQuery();
+         
+            if(rs.next()){
+                ukupnaIsplata = new BigDecimal(rs.getInt(1));
+            }
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ukupnaIsplata;
     }
 
     @Override
-    public BigDecimal dohvatiProsecnuOcenuZaZaposlenog(int idZaposleni) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public BigDecimal dohvatiProsecnuOcenuZaZaposlenog(int idZaposleni) { 
+        BigDecimal prosecnaOcena = new BigDecimal(-1);
+        try{
+            String querry = "Select ProsecnaOcena From [dbo].[Zaposleni] Where idZaposlenog = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setInt(1, idZaposleni);
+            ResultSet rs = stm.executeQuery();
+         
+            if(rs.next()){
+                prosecnaOcena = new BigDecimal(rs.getInt(1));
+            }
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return prosecnaOcena;        
     }
 
     @Override
     public int dohvatiBrojTrenutnoZaduzeneOpremeZaZaposlenog(int idZaposleni) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int zaduzenaOprema = -1;
+        try{
+            String querry = "Select ZaduzenaOprema From [dbo].[Zaposleni] Where idZaposlenog = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setInt(1, idZaposleni);
+            ResultSet rs = stm.executeQuery();
+         
+            if(rs.next()){
+                zaduzenaOprema = rs.getInt(1);
+            }
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return zaduzenaOprema;
     }
 
     @Override
     public List<Integer> dohvatiSveZaposlene() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Integer> sviZaposleni = new LinkedList<>();
+        try{
+            String querry = "Select idZaposlenog From [dbo].[Zaposleni]";
+            PreparedStatement stm = con.prepareStatement(querry);
+            ResultSet rs = stm.executeQuery();
+         
+            while(rs.next()){
+                sviZaposleni.add(rs.getInt("idZaposlenog"));
+            }
+            
+            if(sviZaposleni.isEmpty())
+                sviZaposleni = null;
+        
+        } catch (SQLException ex) {
+            sviZaposleni = null;
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return sviZaposleni;
     }
 
     @Override
     public int unesiMagacin(int idSef, BigDecimal plata, int idGradiliste) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int rtnValue = -1;
+        try {
+            String querry = "Insert Into Magacin (idSefa, idGradilista, Plata) " +
+                            "Values (?, ?, ?)";
+            PreparedStatement stm = con.prepareStatement(querry, Statement.RETURN_GENERATED_KEYS);
+            stm.setInt(1, idSef);
+            stm.setInt(2, idGradiliste);
+            stm.setBigDecimal(3, plata);
+            int rowsInserted = stm.executeUpdate();
+         
+            if (rowsInserted == 0) 
+                throw new SQLException("Insert failed!");
+        
+                ResultSet genKeys = stm.getGeneratedKeys();
+                
+            if(genKeys.next())
+                rtnValue = genKeys.getInt(1);
+            else
+                throw new SQLException("No id obtained!");
+         
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rtnValue;
     }
 
     @Override
