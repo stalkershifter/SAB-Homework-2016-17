@@ -4,8 +4,8 @@
 Declare @Naziv varchar(100),
 		@DatumOsnivanja datetime
 
-Set		@Naziv = 'Gradiliste 4'
-Set		@DatumOsnivanja = '2015-08-25'
+Set		@Naziv = 'Gradiliste 3'
+Set		@DatumOsnivanja = '2017-08-25'
 
 Insert Into [dbo].[Gradiliste] (Naziv, DatumOsnivanja) Values (@Naziv, @DatumOsnivanja)
 Select @@Identity
@@ -29,8 +29,8 @@ Select idGradilista From dbo.Gradiliste
 Declare @Naziv varchar(100),
 		@idGradilista int
 
-Set		@Naziv = 'Stambena zgrada 2'
-Set		@idGradilista = 11
+Set		@Naziv = 'Stambena zgrada 6'
+Set		@idGradilista = 3
 
 Insert Into [dbo].[Objekat] (Naziv, idGradilista) Values (@Naziv, @idGradilista) 
 Select @@Identity
@@ -48,7 +48,7 @@ Delete From [dbo].[Objekat] Where idObjekta = @idObjekta
   
 select * from [Sprat]
 
-Insert Into Sprat (idObjekta, BrojSprata) Values (13, 2)
+Insert Into Sprat (idObjekta, BrojSprata) Values (5, 3)
 
 --@return 0-operacija uspesna 1-operacija neuspesna
 --public int obrisiSprat(int idSprat); 
@@ -67,13 +67,13 @@ Declare @ime varchar(100),
 		@eMail varchar(100),
 		@brojTelefona varchar(20)
 
-Set @ime = 'Nikola'
-Set	@prezime = 'Mancic'
-Set	@jmbg = '1234567890123'
+Set @ime = 'Stefan'
+Set	@prezime = 'Kupresak'
+Set	@jmbg = '1234567890126'
 Set	@pol = 'M'
-Set	@ziroRacun = '370-123612-13'
-Set	@eMail = 'manca_vg@hotmail.com'
-Set	@brojTelefona = '064/2671435'
+Set	@ziroRacun = '370-123612-14'
+Set	@eMail = 'stefan_vg@hotmail.com'
+Set	@brojTelefona = '064/26714162'
 
 Insert Into Zaposleni (Ime, Prezime, JMBG, Pol, ZiroRacun, EMail, BrojTelefona)
 Values (@ime, @prezime, @jmbg, @pol, @ziroRacun, @eMail, @brojTelefona)
@@ -82,7 +82,7 @@ Select @@Identity
 select * from Zaposleni
 
 --@return 0-operacija uspesna 1-operacija neuspesna   
---public  int obrisiZaposlenog(int idZaposleni) 
+--public int obrisiZaposlenog(int idZaposleni) 
 
 Declare @idZaposlenog int
 Delete From [dbo].[Zaposleni] Where idZaposlenog = @idZaposlenog
@@ -124,9 +124,9 @@ Declare @idSef int,
 		@plata decimal(10,3),
 		@idGradiliste int
 
-Set @idSef = 6
-Set	@plata = 500
-Set	@idGradiliste = 13
+Set @idSef = 2
+Set	@plata = 700
+Set	@idGradiliste = 2
 
 Insert Into Magacin (idSefa, idGradilista, Plata)
 Values (@idSef, @idGradiliste, @plata)
@@ -134,26 +134,35 @@ Select @@Identity
 
 select * from Magacin
 
-    /**
-     * 
-     * @param idMagacin
-     * @return 0-operacija uspesna 1-operacija neuspesna
-     */
-    public abstract int obrisiMagacin(int idMagacin); 
-    /**
-     * 
-     * @param idMagacin
-     * @param idSefNovo
-     * @return 0-operacija uspesna 1-operacija neuspesna
-     */
-    public abstract int izmeniSefaZaMagacin(int idMagacin, int idSefNovo);
-    /**
-     * 
-     * @param idMagacin
-     * @param plataNovo
-     * @return 0-operacija uspesna 1-operacija neuspesna
-     */
-    public abstract int izmeniPlatuZaMagacin(int idMagacin, BigDecimal plataNovo);
+--@return 0-operacija uspesna 1-operacija neuspesna
+--public int obrisiMagacin(int idMagacin)
+
+Declare @idMagacina int
+Delete From [dbo].[Magacin] Where idMagacina = 5
+
+--@return 0-operacija uspesna 1-operacija neuspesna
+--public int izmeniSefaZaMagacin(int idMagacin, int idSefNovo)
+
+Declare @idSefNovo int,
+		@idMagacin int   
+
+Set		@idSefNovo = 2
+Set		@idMagacin = 5
+
+Update [dbo].[Magacin] Set idSefa = @idSefNovo Where idMagacina = @idMagacin
+
+--@return 0-operacija uspesna 1-operacija neuspesna
+--public abstract int izmeniPlatuZaMagacin(int idMagacin, BigDecimal plataNovo);
+
+Declare @plataNovo int,
+		@idMagacin int   
+
+Set		@plataNovo = 400
+Set		@idMagacin = 5
+
+Update [dbo].[Magacin] Set Plata = @plataNovo Where idMagacina = @idMagacin
+
+
     /**
      * Isplacuje mesecnu platu svakom zaposlenom koji radi u nekom od magacina.
      * @return 0-operacija uspesna 1-operacija neuspesna

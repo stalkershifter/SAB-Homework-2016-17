@@ -81,7 +81,7 @@ Begin
 End
 Go
 
-alter Trigger proveraBrojaSprata
+Create Trigger proveraBrojaSprata
 On dbo.Sprat
 for insert, delete
 As
@@ -124,5 +124,36 @@ Begin
 
 	close @cursor
 	deallocate @cursor
+End
+Go
+
+
+Create Trigger postojiSefMagacina
+On dbo.Magacin
+for insert, update
+As
+Begin
+	Declare @cursor Cursor
+
+	Declare @idSefa int
+		
+		Set @cursor = Cursor For
+		Select @idSefa From inserted
+
+	Open @cursor
+
+	Fetch Next From @cursor Into @idSefa
+	
+	While @@Fetch_Status = 0
+	Begin
+		
+		If((Select Count(*) From dbo.Magacin Where idSefa = @idSefa) <> 1)
+		Begin
+			Print('Sef sa id-em ' + Convert(varchar(10), @idSefa) + ' je vec zaposlen u drugom magacinu!')
+			Rollback Transaction
+		End
+
+		Fetch Next From @cursor Into @idSefa
+	End
 End
 Go
