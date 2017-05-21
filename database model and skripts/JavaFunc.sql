@@ -67,12 +67,12 @@ Declare @ime varchar(100),
 		@eMail varchar(100),
 		@brojTelefona varchar(20)
 
-Set @ime = 'Stefan'
-Set	@prezime = 'Kupresak'
-Set	@jmbg = '1234567890126'
+Set @ime = 'Ime3'
+Set	@prezime = 'Prezime3'
+Set	@jmbg = '12356322383121'
 Set	@pol = 'M'
-Set	@ziroRacun = '370-123612-14'
-Set	@eMail = 'stefan_vg@hotmail.com'
+Set	@ziroRacun = '370-123612-13'
+Set	@eMail = 'ime_prezime@gmail.com'
 Set	@brojTelefona = '064/26714162'
 
 Insert Into Zaposleni (Ime, Prezime, JMBG, Pol, ZiroRacun, EMail, BrojTelefona)
@@ -124,14 +124,15 @@ Declare @idSef int,
 		@plata decimal(10,3),
 		@idGradiliste int
 
-Set @idSef = 2
+Set @idSef = 8
 Set	@plata = 700
-Set	@idGradiliste = 2
+Set	@idGradiliste = 1
 
 Insert Into Magacin (idSefa, idGradilista, Plata)
 Values (@idSef, @idGradiliste, @plata)
 Select @@Identity
 
+select * from zaposleni
 select * from Magacin
 
 --@return 0-operacija uspesna 1-operacija neuspesna
@@ -152,7 +153,7 @@ Set		@idMagacin = 5
 Update [dbo].[Magacin] Set idSefa = @idSefNovo Where idMagacina = @idMagacin
 
 --@return 0-operacija uspesna 1-operacija neuspesna
---public abstract int izmeniPlatuZaMagacin(int idMagacin, BigDecimal plataNovo);
+--public int izmeniPlatuZaMagacin(int idMagacin, BigDecimal plataNovo);
 
 Declare @plataNovo int,
 		@idMagacin int   
@@ -163,179 +164,250 @@ Set		@idMagacin = 5
 Update [dbo].[Magacin] Set Plata = @plataNovo Where idMagacina = @idMagacin
 
 
-    /**
-     * Isplacuje mesecnu platu svakom zaposlenom koji radi u nekom od magacina.
-     * @return 0-operacija uspesna 1-operacija neuspesna
-     */
-    public abstract int isplatiPlateZaposlenimaUSvimMagacinima();
-    /**
-     * Isplacuje mesecnu platu svakom zaposlenom koji radi u magacinu ciji je id prosledjen kao argument metode.
-     * @return 0-operacija uspesna 1-operacija neuspesna
-     */
-    public abstract int isplatiPlateZaposlenimaUMagacinu(int idMagacin);
-    
-    /**
-     * 
-     * @param idRoba
-     * @param idMagacin
-     * @param kolicina
-     * @return idRobaUMagacinu ili -1 u slucaju greske
-     */
-    public abstract int unesiRobuUMagacinPoKolicini(int idRoba, int idMagacin, BigDecimal kolicina); 
-    /**
-     * 
-     * @param idRoba
-     * @param idMagacin
-     * @param brojJedinica
-     * @return idRobaUMagacinu ili -1 u slucaju greske
-     */
-    public abstract int unesiRobuUMagacinPoBrojuJedinica(int idRoba, int idMagacin, int brojJedinica); 
-    /**
-     * Ukoliko se trazi veca kolicina u odnosu na onu koja postoji u magacinu uzece se kolicina koja postoji u magacinu za tu robu.
-     * @param idZonaMagacina
-     * @return kolicinaRobeUzetaIzMagacina ili -1 u slucaju greske
-     */
-    public abstract BigDecimal uzmiRobuIzMagacinaPoKolicini(int idRoba, int idMagacin, BigDecimal kolicina); 
-    /**
-     * Ukoliko se trazi veci broj jedinica u odnosu na onaj broj koji postoji u magacinu uzece se onoliko jedinica koliko postoji u magacinu za tu robu.
-     * @param idZonaMagacina
-     * @return kolicinaRobeUzetaIzMagacina ili -1 u slucaju greske
-     */
-    public abstract int uzmiRobuIzMagacinaPoBrojuJedinica(int idRoba, int idMagacin, int brojJedinca);
-    /**
-     * 
-     * @param idRoba
-     * @param idMagacin
-     * @return kolicinaRobeUMagacinu, -1 ukoliko je roba definisana u broju jedinica ili je u pitanju druga greska
-     */
-    public abstract BigDecimal pogledajKolicinuRobeUMagacinu(int idRoba, int idMagacin);
-    /**
-     * 
-     * @param idRoba
-     * @param idMagacin
-     * @return brojJedinicaRobeUMagacinu, -1 ukoliko je roba definisana kolicinom ili je u pitanju druga greska
-     */
-    public abstract int pogledajBrojJedinicaRobeUMagacinu(int idRoba, int idMagacin);
-    
-    /**
-     * 
-     * @param naziv
-     * @return idTipRobe ili -1 u slucaju greske
-     */
-    public abstract int unesiTipRobe(String naziv); 
-    /**
-     * 
-     * @param idTipRobe
-     * @return 0-operacija uspesna 1-operacija neuspesna
-     */
-    public abstract int obrisiTipRobe(int idTipRobe); 
-    
-    /**
-     * 
-     * @param naziv
-     * @param kod
-     * @param jedinicnaMasa
-     * @param jedinicnaDuzina
-     * @param jedinicnaSirina
-     * @param jedinicnaVisina
-     * @param brojJedinicaPoPakovanju
-     * @param idTipRobe
-     * @param idZonaMagacina
-     * @return idRoba ili -1 u slucaju greske
-     */
-    public abstract int unesiRobu(String naziv, String kod, int idTipRobe); 
-    /**
-     * 
-     * @param idRoba
-     * @return 0-operacija uspesna 1-operacija neuspesna
-     */
-    public abstract int obrisiRobu(int idRoba); 
-    public abstract List<Integer> dohvatiSvuRobu();
-    
-    /**
-     * 
-     * @param idZaposleni
-     * @param idMagacin
-     * @return argument idZaposleni ili -1 u slucaju greske
-     */
-    public abstract int zaposleniRadiUMagacinu(int idZaposleni, int idMagacin); 
-    /**
-     * Brise informaciju o tome da zaposleni radi i da je ikada radio u magacinu.
-     * @param idZaposleni
-     * @return 0-operacija uspesna 1-operacija neuspesna
-     */
-    public abstract int zaposleniNeRadiUMagacinu(int idZaposleni);
-    
-    /**
-     * 
-     * @param idZaposlenogKojiZaduzuje
-     * @param idZaposlenogUMagacinuOdKogaSeZaduzuje
-     * @param idRobaKojaSeZaduzuje
-     * @param napomena
-     * @return idZaduzenjaOpreme ili -1 u slucaju greske
-     */
-    public abstract int zaposleniZaduzujeOpremu(int idZaposlenogKojiZaduzuje, int idMagacin, int idRoba, Date datumZaduzenja, String napomena);
-    /**
-     * Ne brise zaduzenje vec samo postavlja datum razduzenja.
-     * @param idZaduzenjaOpreme
-     * @return 0-operacija uspesna 1-operacija neuspesna
-     */
-    public abstract int zaposleniRazduzujeOpremu(int idZaduzenjaOpreme, Date datumRazduzenja); 
+--@return 0-operacija uspesna 1-operacija neuspesna
+--public int isplatiPlateZaposlenimaUSvimMagacinima()
 
-    /**
-     * 
-     * @param id
-     * @param naziv
-     * @param cenaIzrade
-     * @param jedinicnaPlataRadnika
-     * @return idNormaUgradnogDela ili -1 u slucaju greske
-     */
-    public abstract int unesiNormuUgradnogDela(String naziv, BigDecimal cenaIzrade, BigDecimal jedinicnaPlataRadnika);
-    /**
-     * 
-     * @param idNormaUgradnogDela
-     * @return 0-operacija uspesna 1-operacija neuspesna
-     */
-    public abstract int obrisiNormuUgradnogDela(int idNormaUgradnogDela);
-    /**
-     * 
-     * @param idNR
-     * @return jenicnaPlataRadnikaNormeRada ili -1 u slucaju greske
-     */
-    public abstract BigDecimal dohvatiJedinicnuPlatuRadnikaNormeUgradnogDela(int idNR);
+Insert Into RadiUMagacinu
+Select  5, 8
 
-    /**
-     * 
-     * @param idRobaKojaJePotrosniMaterijal
-     * @param idNormaUgradnogDela
-     * @param brojPakovanja
-     * @return idPotrebanMaterijal ili -1 u slucaju greske
-     */
-    public abstract int unesiPotrebanMaterijalPoBrojuJedinica(int idRobaKojaJePotrosniMaterijal, int idNormaUgradnogDela, int brojJedinica);
-    /**
-     * 
-     * @param idRobaKojaJePotrosniMaterijal
-     * @param idNormaUgradnogDela
-     * @param kolicina
-     * @return idPotrebanMaterijal ili -1 u slucaju greske
-     */
-    public abstract int unesiPotrebanMaterijalPoKolicini(int idRobaKojaJePotrosniMaterijal, int idNormaUgradnogDela, BigDecimal kolicina);
-    /**
-     * 
-     * @param idRobaKojaJePotrosniMaterijal
-     * @param idNormaUgradnogDela
-     * @return 0-operacija uspesna 1-operacija neuspesna
-     */
-    public abstract int obrisiPotrebanMaterijal(int idRobaKojaJePotrosniMaterijal, int idNormaUgradnogDela);
+Select * From Magacin
+Select * From RadiUMagacinu
+Select * From Zaposleni
+
+Declare @idMagacina int
+Exec isplataPlatePoMagacinima @idMagacina
+
+--@return 0-operacija uspesna 1-operacija neuspesna
+--public int isplatiPlateZaposlenimaUMagacinu(int idMagacin)
+
+Declare @idMagacina int
+Set @idMagacina = 1
+Exec isplataPlatePoMagacinima @idMagacina
     
-    /**
-     * Datum kraja ce biti postavljen kada posao bude zavrsen.
-     * @param idNormaUgradnogDela
-     * @param idSprat
-     * @param datumKraja
-     * @return idPosao ili -1 u slucaju greske
-     */
-    public abstract int unesiPosao(int idNormaUgradnogDela, int idSprat, Date datumPocetka); 
+--@return idRobaUMagacinu ili -1 u slucaju greske
+--public int unesiRobuUMagacinPoKolicini(int idRoba, int idMagacin, BigDecimal kolicina)
+
+DECLARE	@idRobe int,
+		@idMagacina int,
+		@Kolicina decimal(10, 3), 
+		@return_value int
+
+Exec @return_value = uzimanjeRobePoKolicini @idRobe, @idMagacina, @Kolicina
+Select @return_value
+    
+--@return idRobaUMagacinu ili -1 u slucaju greske
+--public int unesiRobuUMagacinPoBrojuJedinica(int idRoba, int idMagacin, int brojJedinica) 
+
+DECLARE	@idRobe int,
+		@idMagacina int,
+		@BrojJedinica int, 
+		@return_value int
+
+Exec @return_value = unosRobePoJedinici @idRobe, @idMagacina, @BrojJedinica
+Select @return_value
+
+--@return kolicinaRobeUzetaIzMagacina ili -1 u slucaju greske
+--public BigDecimal uzmiRobuIzMagacinaPoKolicini(int idRoba, int idMagacin, BigDecimal kolicina)
+    
+DECLARE	@idRobe int,
+		@idMagacina int,
+		@Kolicina decimal(10, 3), 
+		@return_value decimal(10, 3)
+
+Exec @return_value = uzimanjeRobePoKolicini @idRobe, @idMagacina, @BrojJedinica
+Select @return_value	
+ 
+--@return kolicinaRobeUzetaIzMagacina ili -1 u slucaju greske
+--public int uzmiRobuIzMagacinaPoBrojuJedinica(int idRoba, int idMagacin, int brojJedinca)
+
+DECLARE	@idRobe int,
+		@idMagacina int,
+		@BrojJedinica int, 
+		@return_value int
+
+Exec @return_value = uzimanjeRobePoJedinicama @idRobe, @idMagacina, @BrojJedinica
+Select @return_value
+
+--@return kolicinaRobeUMagacinu, -1 ukoliko je roba definisana u broju jedinica ili je u pitanju druga greska
+--public abstract BigDecimal pogledajKolicinuRobeUMagacinu(int idRoba, int idMagacin)
+     
+DECLARE	@idRobe int,
+		@idMagacina int
+
+		set @idMagacina = 2
+		set @idRobe = 1
+
+Select Kolicina From [dbo].[RobaPoKolicini] Where idRobe = @idRobe And idMagacina = @idMagacina
+
+--@return brojJedinicaRobeUMagacinu, -1 ukoliko je roba definisana kolicinom ili je u pitanju druga greska
+--public abstract int pogledajBrojJedinicaRobeUMagacinu(int idRoba, int idMagacin)
+  
+DECLARE	@idRobe int,
+		@idMagacina int
+
+		set @idMagacina = 1
+		set @idRobe = 13
+
+Select BrojJedinica From [dbo].[RobaPoJedinici] Where idRobe = @idRobe And idMagacina = @idMagacina
+
+--@return idTipRobe ili -1 u slucaju greske
+--public int unesiTipRobe(String naziv)
+    
+Declare @NazivTipa int
+Insert Into dbo.TipRobe (Naziv) Values (@NazivTipa)
+	
+	
+--@return 0-operacija uspesna 1-operacija neuspesna
+--public int obrisiTipRobe(int idTipRobe); 
+    
+Declare @idTipRobe int
+Delete From [dbo].[TipRobe] Where idTipRobe = @idTipRobe
+
+--@return idRoba ili -1 u slucaju greske
+--public int unesiRobu(String naziv, String kod, int idTipRobe); 
+  
+Declare @Naziv int,
+		@Kod varchar(4),
+		@idTipRobe
+Insert Into dbo.Roba (idTipRobe, Naziv, Kod) Values (@idTipRobe, @Naziv, @Kod)
+  
+--@return 0-operacija uspesna 1-operacija neuspesna
+--public int obrisiRobu(int idRoba); 
+ 
+Declare @idRobe int
+Delete From [dbo].[Roba] Where idRobe = @idRobe
+    
+--@return lista primarnih kljuceva sve robe ili null u slucaju greske ili ukoliko nema robe
+--public List<Integer> dohvatiSvuRobu()
+
+Select idRobe From dbo.Roba  
+    
+--@return argument idZaposleni ili -1 u slucaju greske
+--public int zaposleniRadiUMagacinu(int idZaposleni, int idMagacin)
+
+Declare @idZaposlenog int,	
+		@idMagacina int
+
+Insert Into dbo.RadiUMagacinu (idZaposlenog, idMagacina)
+Values (@idZaposlenog, @idMagacina)
+
+--@return 0-operacija uspesna 1-operacija neuspesna
+--public int zaposleniNeRadiUMagacinu(int idZaposleni)
+ 
+Declare @idZaposlenog int
+Set @idZaposlenog = 11
+Delete From [dbo].[RadiUMagacinu] Where idZaposlenog = @idZaposlenog
+    
+--@return idZaduzenjaOpreme ili -1 u slucaju greske
+--public int zaposleniZaduzujeOpremu(int idZaposlenogKojiZaduzuje, int idMagacin, int idRoba, Date datumZaduzenja, String napomena)
+
+Declare @idMagacina int,
+		@idOpreme int,
+		@idZaposlenog int,
+		@DatumZaduzenja datetime,
+		@Napomena varchar(100) 
+
+Set @idMagacina = 1
+Set	@idOpreme = 13
+Set	@idZaposlenog = 2
+Set	@DatumZaduzenja = '20181003'
+Set	@Napomena = 'Napomena3'
+
+Insert Into dbo.ZaduzenaOprema (idMagacina, idOpreme, idZaposlenog, DatumZaduzenja, Napomena) 
+Values (@idMagacina, @idOpreme, @idZaposlenog, @DatumZaduzenja, @Napomena)
+
+Select @@Identity
+
+--@return 0-operacija uspesna 1-operacija neuspesna
+--public int zaposleniRazduzujeOpremu(int idZaduzenjaOpreme, Date datumRazduzenja); 
+
+Declare @idZaduzeneOpreme int,
+		@datumRazduzenja datetime   
+
+Set		@idZaduzeneOpreme = 5
+Set		@datumRazduzenja = '20181003'
+
+Update [dbo].ZaduzenaOprema Set DatumRazduzenja = @datumRazduzenja Where idZaduzeneOpreme = @idZaduzeneOpreme
+
+--@return idNormaUgradnogDela ili -1 u slucaju greske
+--public int unesiNormuUgradnogDela(String naziv, BigDecimal cenaIzrade, BigDecimal jedinicnaPlataRadnika)
+   
+Declare @Naziv varchar(100),
+		@CenaIzrade decimal(10, 3),
+		@JedinicnaPlata decimal(10, 3)
+
+Set @Naziv = 'Ugradni Deo 1'
+Set	@CenaIzrade = 800
+Set	@JedinicnaPlata = 50
+
+Insert Into dbo.NormaUgradnihDelova (Naziv, CenaIzrade, JedinicnaPlata) 
+Values (@Naziv, @CenaIzrade, @JedinicnaPlata)
+
+Select @@Identity
+
+Select * From dbo.NormaUgradnihDelova
+
+--@return 0-operacija uspesna 1-operacija neuspesna
+--public int obrisiNormuUgradnogDela(int idNormaUgradnogDela)
+   
+Declare @idNUD int
+Set @idNUD = 3
+Delete From [dbo].[NormaUgradnihDelova] Where idNUD = @idNUD   
+    
+--@return jenicnaPlataRadnikaNormeRada ili -1 u slucaju greske
+--public BigDecimal dohvatiJedinicnuPlatuRadnikaNormeUgradnogDela(int idNR)
+
+Declare @idNUD int
+Set @idNUD = 1
+Select JedinicnaPlata From [dbo].[NormaUgradnihDelova] Where idNUD = @idNUD   
+
+--@return idPotrebanMaterijal ili -1 u slucaju greske
+--public int unesiPotrebanMaterijalPoBrojuJedinica(int idRobaKojaJePotrosniMaterijal, int idNormaUgradnogDela, int brojJedinica);
+ 
+Declare @idRobe int,
+		@idNUD int,
+		@BrojJedinica int
+
+Set @idRobe = 1
+Set	@idNUD = 1
+Set	@BrojJedinica = 50
+
+Insert Into dbo.PotrebanMaterijal (idRobe, idNUD, BrojJedinica) 
+Values (@idRobe, @idNUD, @BrojJedinica)
+
+Select * From dbo.PotrebanMaterijal  
+  
+--@return idPotrebanMaterijal ili -1 u slucaju greske
+--public int unesiPotrebanMaterijalPoKolicini(int idRobaKojaJePotrosniMaterijal, int idNormaUgradnogDela, BigDecimal kolicina);
+ 
+Declare @idRobe int,
+		@idNUD int,
+		@Kolicina int
+
+Set @idRobe = 1
+Set	@idNUD = 1
+Set	@Kolicina = 100
+
+Insert Into dbo.PotrebanMaterijal (idRobe, idNUD, Kolicina) 
+Values (@idRobe, @idNUD, @Kolicina)
+
+Select * From dbo.PotrebanMaterijal 
+ 
+--@return 0-operacija uspesna 1-operacija neuspesna
+--public int obrisiPotrebanMaterijal(int idRobaKojaJePotrosniMaterijal, int idNormaUgradnogDela);
+    
+Declare @idRobe int,
+		@idNUD int
+
+Set @idRobe = 1
+Set @idNUD = 1
+
+Delete From [dbo].[PotrebanMaterijal] Where idRobe = @idRobe And idNUD = @idNUD  
+
+--@return idPosao ili -1 u slucaju greske
+--public int unesiPosao(int idNormaUgradnogDela, int idSprat, Date datumPocetka)
+
+
     /**
      * 
      * @param idPosao
