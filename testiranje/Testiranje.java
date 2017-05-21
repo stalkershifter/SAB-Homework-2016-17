@@ -6,10 +6,12 @@
 package testiranje;
 
 import funkcionalnosti.Funkcionalnosti;
+import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.List;
+//import java.math.BigDecimal;
+//import java.util.List;
 import student.mn120354;
-import testovi.JavniTest;
+//import testovi.JavniTest;
 
 /**
  *
@@ -23,13 +25,13 @@ public class Testiranje {
     public static void main(String[] args) {
         Funkcionalnosti funkcionalnosti = new mn120354();
 
-       // System.out.println("Sprat id: " + funkcionalnosti.unesiSprat(3, 13));
-        funkcionalnosti.unesiZaposlenog("Milos", "Milosevic", "2503989720031", "M", "370-11032274-01", "milos@google.com", "069/1245301");
-        funkcionalnosti.unesiZaposlenog("Jovan", "Jovanovic", "2403989720031", "M", "370-11032274-02", "jovan@google.com", "069/1245302");
-        funkcionalnosti.unesiZaposlenog("Marko", "Markovic", "2402989720031", "M", "370-11032274-03", "marko@google.com", "069/1245303");
-        funkcionalnosti.unesiZaposlenog("Magdalena", "Despotovic", "2403987720031", "Z", "370-11032274-03", "magdalena@google.com", "069/1245303");
-        funkcionalnosti.unesiZaposlenog("Katarina", "Vasic", "1204990720031", "Z", "370-11032274-04", "katarina@google.com", "069/1245304");
-        double procenata = 100; //JavniTest.test(funkcionalnosti);
+       // System.out.println("Sprat id: " + funkcionalnosti.unesiSprat(3, 13));nutnoZaduzeneOpremeZaZaposlenog(11));
+        
+       // System.out.println("Unet magacin: " + funkcionalnosti.unesiMagacin(7, new BigDecimal(300), 13));
+       int id; 
+//       System.err.println("ID: " + (funkcionalnosti.unesiNormuUgradnogDela("Ugradni Deo 2", new BigDecimal(1000), new BigDecimal(100)))); 
+       System.err.println(funkcionalnosti.obrisiNormuUgradnogDela(3) == 0 ? "Uspesno" : "Neuspesno");
+        /*double procenata = 100; //JavniTest.test(funkcionalnosti);
         double koeficijentDomaci = 0.2;
         double koeficijentJavniTest = 0.5;
         double koeficijentTajniTestovi = 0.5;
@@ -37,7 +39,7 @@ public class Testiranje {
         System.out.println();
         System.out.println("==============================================");
         System.out.println("Na javnom testu osvojili ste " + procenata * koeficijentDomaci * koeficijentJavniTest + " poena");
-        System.out.println("==============================================");
+        System.out.println("==============================================");*/
     }
     
 }

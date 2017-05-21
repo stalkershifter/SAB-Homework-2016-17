@@ -8,13 +8,16 @@ package student;
 import funkcionalnosti.Funkcionalnosti;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLType;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -70,7 +73,7 @@ public class mn120354 extends Funkcionalnosti{
 
     @Override
     public int obrisiGradiliste(int idGradiliste) {
-        int succ = 1;
+        int succ = 0;
         try{
         String querry = "Delete From dbo.Gradiliste Where idGradilista = ?";
             PreparedStatement stm = con.prepareStatement(querry);
@@ -78,10 +81,10 @@ public class mn120354 extends Funkcionalnosti{
             int rowsDeleted = stm.executeUpdate();
          
             if (rowsDeleted == 0) 
-                succ = 0;
+                succ = 1;
         
         } catch (SQLException ex) {
-            succ = 0;
+            succ = 1;
             Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
         }
         return succ;
@@ -137,7 +140,7 @@ public class mn120354 extends Funkcionalnosti{
 
     @Override
     public int obrisiObjekat(int idObjekat) {
-       int succ = 1;
+       int succ = 0;
         try{
         String querry = "Delete From [dbo].[Objekat] Where idObjekta = ?";
             PreparedStatement stm = con.prepareStatement(querry);
@@ -145,10 +148,10 @@ public class mn120354 extends Funkcionalnosti{
             int rowsDeleted = stm.executeUpdate();
          
             if (rowsDeleted == 0) 
-                succ = 0;
+                succ = 1;
         
         } catch (SQLException ex) {
-            succ = 0;
+            succ = 1;
             Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
         }
         return succ;
@@ -182,7 +185,7 @@ public class mn120354 extends Funkcionalnosti{
 
     @Override
     public int obrisiSprat(int idSprat) {
-        int succ = 1;
+        int succ = 0;
         try{
         String querry = "Delete From [dbo].[Sprat] Where idSprata = ?";
             PreparedStatement stm = con.prepareStatement(querry);
@@ -190,10 +193,10 @@ public class mn120354 extends Funkcionalnosti{
             int rowsDeleted = stm.executeUpdate();
          
             if (rowsDeleted == 0) 
-                succ = 0;
+                succ = 1;
         
         } catch (SQLException ex) {
-            succ = 0;
+            succ = 1;
             Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
         }
         return succ;
@@ -233,7 +236,7 @@ public class mn120354 extends Funkcionalnosti{
 
     @Override
     public int obrisiZaposlenog(int idZaposleni) {
-        int succ = 1;
+        int succ = 0;
         try{
         String querry = "Delete From [dbo].[Zaposleni] Where idZaposlenog = ?";
             PreparedStatement stm = con.prepareStatement(querry);
@@ -241,10 +244,10 @@ public class mn120354 extends Funkcionalnosti{
             int rowsDeleted = stm.executeUpdate();
          
             if (rowsDeleted == 0) 
-                succ = 0;
+                succ = 1;
         
         } catch (SQLException ex) {
-            succ = 0;
+            succ = 1;
             Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
         }
         return succ;
@@ -359,7 +362,7 @@ public class mn120354 extends Funkcionalnosti{
 
     @Override
     public int obrisiMagacin(int idMagacin) {
-        int succ = 1;
+        int succ = 0;
         try{
         String querry = "Delete From [dbo].[Magacin] Where idMagacina = ?";
             PreparedStatement stm = con.prepareStatement(querry);
@@ -367,10 +370,10 @@ public class mn120354 extends Funkcionalnosti{
             int rowsDeleted = stm.executeUpdate();
          
             if (rowsDeleted == 0) 
-                succ = 0;
+                succ = 1;
         
         } catch (SQLException ex) {
-            succ = 0;
+            succ = 1;
             Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
         }
         return succ;
@@ -378,7 +381,7 @@ public class mn120354 extends Funkcionalnosti{
 
     @Override
     public int izmeniSefaZaMagacin(int idMagacin, int idSefNovo) {
-        int succ = 1;
+        int succ = 0;
         try {
             String querry = "Update [dbo].[Magacin] Set idSefa = ? Where idMagacina = ?";
             PreparedStatement stm = con.prepareStatement(querry);
@@ -390,7 +393,7 @@ public class mn120354 extends Funkcionalnosti{
                 throw new SQLException("Update failed!");
             
         } catch (SQLException ex) {
-            succ = 0;
+            succ = 1;
             Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
         }
         return succ;        
@@ -398,19 +401,19 @@ public class mn120354 extends Funkcionalnosti{
 
     @Override
     public int izmeniPlatuZaMagacin(int idMagacin, BigDecimal plataNovo) {
-        int succ = 1;
+        int succ = 0;
         try {
             String querry = "Update [dbo].[Magacin] Set Plata = ? Where idMagacina = ?";
             PreparedStatement stm = con.prepareStatement(querry);
             stm.setBigDecimal(1, plataNovo);
             stm.setInt(2, idMagacin);
-            int rowsInserted = stm.executeUpdate();
+            int rowsUpdated = stm.executeUpdate();
          
-            if (rowsInserted == 0)
+            if (rowsUpdated == 0)
                 throw new SQLException("Update failed!");
             
         } catch (SQLException ex) {
-            succ = 0;
+            succ = 1;
             Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
         }
         return succ;  
@@ -418,117 +421,507 @@ public class mn120354 extends Funkcionalnosti{
 
     @Override
     public int isplatiPlateZaposlenimaUSvimMagacinima() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int succ = 0;
+        try {
+            String querry = "Exec isplataPlatePoMagacinima ?";
+            CallableStatement stm = con.prepareCall(querry);
+            
+            stm.setNull(1, Types.NULL);
+            
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            succ = 1;
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return succ;
     }
 
     @Override
     public int isplatiPlateZaposlenimaUMagacinu(int idMagacin) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int succ = 0;
+        try {
+            String querry = "Exec isplataPlatePoMagacinima ?";
+            CallableStatement stm = con.prepareCall(querry);
+           
+            stm.setInt(1, idMagacin);
+            
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            succ = 1;
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return succ;
     }
 
     @Override
     public int unesiRobuUMagacinPoKolicini(int idRoba, int idMagacin, BigDecimal kolicina) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int rtnValue = -1;
+        try {
+            String querry = "{? = Call unosRobePoKolicini (?, ?, ?)}";
+            CallableStatement stm = con.prepareCall(querry);
+            
+            stm.registerOutParameter(1, Types.INTEGER);
+            stm.setInt(2, idRoba);
+            stm.setInt(3, idMagacin);
+            stm.setBigDecimal(4, kolicina);
+            
+            stm.execute();
+            
+            rtnValue = stm.getInt(1);
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rtnValue;
     }
 
     @Override
     public int unesiRobuUMagacinPoBrojuJedinica(int idRoba, int idMagacin, int brojJedinica) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int rtnValue = -1;
+        try {
+            String querry = "{? = Call unosRobePoJedinici (?, ?, ?)}";
+            CallableStatement stm = con.prepareCall(querry);
+            
+            stm.registerOutParameter(1, Types.INTEGER);
+            stm.setInt(2, idRoba);
+            stm.setInt(3, idMagacin);
+            stm.setInt(4, brojJedinica);
+            
+            stm.execute();
+            
+            rtnValue = stm.getInt(1);
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rtnValue;
     }
 
     @Override
     public BigDecimal uzmiRobuIzMagacinaPoKolicini(int idRoba, int idMagacin, BigDecimal kolicina) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BigDecimal rtnValue = new BigDecimal(-1);
+        try {
+            String querry = "{? = Call uzimanjeRobePoKolicini (?, ?, ?)}";
+            CallableStatement stm = con.prepareCall(querry);
+            
+            stm.registerOutParameter(1, Types.DECIMAL);
+            stm.setInt(2, idRoba);
+            stm.setInt(3, idMagacin);
+            stm.setBigDecimal(4, kolicina);
+            
+            stm.execute();
+            
+            rtnValue = stm.getBigDecimal(1);
+                
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rtnValue;
     }
 
     @Override
     public int uzmiRobuIzMagacinaPoBrojuJedinica(int idRoba, int idMagacin, int brojJedinca) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            int rtnValue = -1;
+        try {
+            String querry = "{? = Call uzimanjeRobePoJedinicama (?, ?, ?)}";
+            CallableStatement stm = con.prepareCall(querry);
+            
+            stm.registerOutParameter(1, Types.INTEGER);
+            stm.setInt(2, idRoba);
+            stm.setInt(3, idMagacin);
+            stm.setInt(4, brojJedinca);
+            
+            stm.execute();
+            
+            rtnValue = stm.getInt(1);
+                
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rtnValue;
     }
 
     @Override
     public BigDecimal pogledajKolicinuRobeUMagacinu(int idRoba, int idMagacin) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BigDecimal kolicina = new BigDecimal(-1);
+        try{
+            String querry = "Select Kolicina From [dbo].[RobaPoKolicini] Where idRobe = ? And idMagacina = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setInt(1, idRoba);
+            stm.setInt(2, idMagacin);
+            ResultSet rs = stm.executeQuery();
+         
+            if(rs.next()){
+                kolicina = rs.getBigDecimal(1);
+            }
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return kolicina;
     }
 
     @Override
     public int pogledajBrojJedinicaRobeUMagacinu(int idRoba, int idMagacin) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int brojJedinica = -1;
+        try{
+            String querry = "Select BrojJedinica From [dbo].[RobaPoJedinici] Where idRobe = ? And idMagacina = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setInt(1, idRoba);
+            stm.setInt(2, idMagacin);
+            ResultSet rs = stm.executeQuery();
+         
+            if(rs.next()){
+                brojJedinica = rs.getInt(1);
+            }
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return brojJedinica;
     }
 
     @Override
     public int unesiTipRobe(String naziv) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int rtnValue = -1;
+        try {
+            String querry = "Insert Into dbo.TipRobe (Naziv) Values (?)";
+            PreparedStatement stm = con.prepareStatement(querry, Statement.RETURN_GENERATED_KEYS);
+            stm.setString(1, naziv);
+            int rowsInserted = stm.executeUpdate();
+         
+            if (rowsInserted == 0) 
+                throw new SQLException("Insert failed!");
+        
+            ResultSet genKeys = stm.getGeneratedKeys();
+                
+            if(genKeys.next())
+                rtnValue = genKeys.getInt(1);
+            else
+                throw new SQLException("No id obtained!");
+         
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rtnValue;
     }
 
     @Override
     public int obrisiTipRobe(int idTipRobe) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    int succ = 0;
+        try{
+        String querry = "Delete From [dbo].[TipRobe] Where idTipRobe = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setInt(1, idTipRobe);
+            int rowsDeleted = stm.executeUpdate();
+         
+            if (rowsDeleted == 0) 
+                succ = 1;
+        
+        } catch (SQLException ex) {
+            succ = 1;
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return succ;
     }
 
     @Override
     public int unesiRobu(String naziv, String kod, int idTipRobe) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int rtnValue = -1;
+        try {
+            String querry = "Insert Into dbo.Roba (idTipRobe, Naziv, Kod) Values (?, ?, ?)";
+            PreparedStatement stm = con.prepareStatement(querry, Statement.RETURN_GENERATED_KEYS);
+            stm.setString(1, naziv);
+            stm.setString(2, kod);
+            stm.setInt(3, idTipRobe);
+            int rowsInserted = stm.executeUpdate();
+         
+            if (rowsInserted == 0) 
+                throw new SQLException("Insert failed!");
+        
+            ResultSet genKeys = stm.getGeneratedKeys();
+                
+            if(genKeys.next())
+                rtnValue = genKeys.getInt(1);
+            else
+                throw new SQLException("No id obtained!");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rtnValue;
     }
 
     @Override
     public int obrisiRobu(int idRoba) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int succ = 0;
+        try{
+        String querry = "Delete From [dbo].[Roba] Where idRobe = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setInt(1, idRoba);
+            int rowsDeleted = stm.executeUpdate();
+         
+            if (rowsDeleted == 0) 
+                succ = 1;
+        
+        } catch (SQLException ex) {
+            succ = 1;
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return succ;
     }
 
     @Override
     public List<Integer> dohvatiSvuRobu() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Integer> svaRoba = new LinkedList<>();
+        try{
+            String querry = "Select idRobe From dbo.Roba ";
+            PreparedStatement stm = con.prepareStatement(querry);
+            ResultSet rs = stm.executeQuery();
+         
+            while(rs.next()){
+                svaRoba.add(rs.getInt("idRobe"));
+            }
+            
+            if(svaRoba.isEmpty())
+                svaRoba = null;
+        
+        } catch (SQLException ex) {
+            svaRoba = null;
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return svaRoba;
     }
 
     @Override
     public int zaposleniRadiUMagacinu(int idZaposleni, int idMagacin) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int rtnValue = -1;
+        try {
+            String querry = "Insert Into dbo.RadiUMagacinu (idZaposlenog, idMagacina) Values (?, ?)";
+            PreparedStatement stm = con.prepareStatement(querry, Statement.RETURN_GENERATED_KEYS);
+            stm.setInt(1, idZaposleni);
+            stm.setInt(2, idMagacin);
+            
+            int rowsInserted = stm.executeUpdate();
+         
+            if (rowsInserted == 0) 
+                throw new SQLException("Insert failed!");
+        
+            rtnValue = idZaposleni;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rtnValue;
     }
 
     @Override
     public int zaposleniNeRadiUMagacinu(int idZaposleni) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int succ = 0;
+        try{
+        String querry = "Delete From [dbo].[RadiUMagacinu] Where idZaposlenog = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setInt(1, idZaposleni);
+            int rowsDeleted = stm.executeUpdate();
+         
+            if (rowsDeleted == 0) 
+                succ = 1;
+        
+        } catch (SQLException ex) {
+            succ = 1;
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return succ;
     }
 
     @Override
     public int zaposleniZaduzujeOpremu(int idZaposlenogKojiZaduzuje, int idMagacin, int idRoba, Date datumZaduzenja, String napomena) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int rtnValue = -1;
+        try {
+            String querry = "Insert Into dbo.ZaduzenaOprema"
+                    + " (idZaposlenog, idMagacina, idOpreme, DatumZaduzenja, Napomena) Values (?, ?, ?, ?, ?)";
+            PreparedStatement stm = con.prepareStatement(querry, Statement.RETURN_GENERATED_KEYS);
+            stm.setInt(1, idZaposlenogKojiZaduzuje);
+            stm.setInt(2, idMagacin);
+            stm.setInt(3, idRoba);
+            stm.setDate(4, datumZaduzenja);
+            stm.setString(5, napomena);
+            
+            int rowsInserted = stm.executeUpdate();
+         
+            if (rowsInserted == 0) 
+                throw new SQLException("Insert failed!");
+        
+                ResultSet genKeys = stm.getGeneratedKeys();
+                
+            if(genKeys.next())
+                rtnValue = genKeys.getInt(1);
+            else
+                throw new SQLException("No id obtained!");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rtnValue;
     }
 
     @Override
     public int zaposleniRazduzujeOpremu(int idZaduzenjaOpreme, Date datumRazduzenja) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int succ = 0;
+        try {
+            String querry = "Update [dbo].ZaduzenaOprema Set DatumRazduzenja = ? Where idZaduzeneOpreme = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setDate(1, datumRazduzenja);
+            stm.setInt(2, idZaduzenjaOpreme);
+            int rowsUpdated = stm.executeUpdate();
+         
+            if (rowsUpdated == 0)
+                throw new SQLException("Update failed!");
+            
+        } catch (SQLException ex) {
+            succ = 1;
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return succ;  
     }
 
     @Override
     public int unesiNormuUgradnogDela(String naziv, BigDecimal cenaIzrade, BigDecimal jedinicnaPlataRadnika) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int rtnValue = -1;
+        try {
+            String querry = "Insert Into dbo.NormaUgradnihDelova (Naziv, CenaIzrade, JedinicnaPlata) Values (?, ?, ?)";
+            PreparedStatement stm = con.prepareStatement(querry, Statement.RETURN_GENERATED_KEYS);
+            stm.setString(1, naziv);
+            stm.setBigDecimal(2, cenaIzrade);
+            stm.setBigDecimal(3, jedinicnaPlataRadnika);
+            int rowsInserted = stm.executeUpdate();
+         
+            if (rowsInserted == 0) 
+                throw new SQLException("Insert failed!");
+        
+                ResultSet genKeys = stm.getGeneratedKeys();
+                
+            if(genKeys.next())
+                rtnValue = genKeys.getInt(1);
+            else
+                throw new SQLException("No id obtained!");
+         
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rtnValue;
     }
 
     @Override
     public int obrisiNormuUgradnogDela(int idNormaUgradnogDela) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int succ = 0;
+        try{
+        String querry = "Delete From [dbo].[NormaUgradnihDelova] Where idNUD = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setInt(1, idNormaUgradnogDela);
+            int rowsDeleted = stm.executeUpdate();
+         
+            if (rowsDeleted == 0) 
+                succ = 1;
+        
+        } catch (SQLException ex) {
+            succ = 1;
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return succ;
     }
 
     @Override
     public BigDecimal dohvatiJedinicnuPlatuRadnikaNormeUgradnogDela(int idNR) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      BigDecimal brojJedinica = new BigDecimal(-1);
+        try{
+            String querry = "Select JedinicnaPlata From [dbo].[NormaUgradnihDelova] Where idNUD = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setInt(1, idNR);
+            ResultSet rs = stm.executeQuery();
+         
+            if(rs.next()){
+                brojJedinica = rs.getBigDecimal(1);
+            }
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return brojJedinica;
     }
 
     @Override
     public int unesiPotrebanMaterijalPoBrojuJedinica(int idRobaKojaJePotrosniMaterijal, int idNormaUgradnogDela, int brojJedinica) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int rtnValue = -1;
+        try {
+            String querry = "Insert Into dbo.PotrebanMaterijal (idRobe, idNUD, BrojJedinica) Values (?, ?, ?)";
+            PreparedStatement stm = con.prepareStatement(querry, Statement.RETURN_GENERATED_KEYS);
+            stm.setInt(1, idRobaKojaJePotrosniMaterijal);
+            stm.setInt(2, idNormaUgradnogDela);
+            stm.setInt(3, brojJedinica);
+            int rowsInserted = stm.executeUpdate();
+         
+            if (rowsInserted == 0) 
+                throw new SQLException("Insert failed!");
+        
+                ResultSet genKeys = stm.getGeneratedKeys();
+                
+            if(genKeys.next())
+                rtnValue = genKeys.getInt(1);
+            else
+                throw new SQLException("No id obtained!");
+         
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rtnValue;
     }
 
     @Override
     public int unesiPotrebanMaterijalPoKolicini(int idRobaKojaJePotrosniMaterijal, int idNormaUgradnogDela, BigDecimal kolicina) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int rtnValue = -1;
+        try {
+            String querry = "Insert Into dbo.PotrebanMaterijal (idRobe, idNUD, Kolicina) Values (?, ?, ?)";
+            PreparedStatement stm = con.prepareStatement(querry, Statement.RETURN_GENERATED_KEYS);
+            stm.setInt(1, idRobaKojaJePotrosniMaterijal);
+            stm.setInt(2, idNormaUgradnogDela);
+            stm.setBigDecimal(3, kolicina);
+            int rowsInserted = stm.executeUpdate();
+         
+            if (rowsInserted == 0) 
+                throw new SQLException("Insert failed!");
+        
+                ResultSet genKeys = stm.getGeneratedKeys();
+                
+            if(genKeys.next())
+                rtnValue = genKeys.getInt(1);
+            else
+                throw new SQLException("No id obtained!");
+         
+        } catch (SQLException ex) {
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rtnValue;
     }
 
     @Override
     public int obrisiPotrebanMaterijal(int idRobaKojaJePotrosniMaterijal, int idNormaUgradnogDela) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int succ = 0;
+        try{
+        String querry = "Delete From [dbo].[PotrebanMaterijal] Where idRobe = ? And idNUD = ?";
+            PreparedStatement stm = con.prepareStatement(querry);
+            stm.setInt(1, idRobaKojaJePotrosniMaterijal);
+            stm.setInt(2, idNormaUgradnogDela);
+            int rowsDeleted = stm.executeUpdate();
+         
+            if (rowsDeleted == 0) 
+                succ = 1;
+        
+        } catch (SQLException ex) {
+            succ = 1;
+            Logger.getLogger(mn120354.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return succ;
     }
 
     @Override
